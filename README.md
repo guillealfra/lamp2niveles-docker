@@ -17,6 +17,6 @@ Abre tu navegador y escribe:
 ```
 http://localhost:8085
 ```
-Si quieres **pararlo** o **eliminar** la infraestructura recomiendo leer las primeras lineas del [dockerfile](./dockerfile)
+Si quieres **pararlo** o **eliminar** la infraestructura recomiendo leer las primeras lineas del [docker-compose.yml](./docker-compose.yml)
 
 
