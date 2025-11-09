@@ -12,3 +12,11 @@ git clone https://github.com/guillealfra/lamp2niveles-docker.git
 cd lamp2niveles-docker
 docker-compose up -d
 ```
+
+Abre tu navegador y escribe:
+```
+http://localhost:8085
+```
+Si quieres **pararlo** o **eliminar** la infraestructura recomiendo leer las primeras lineas del [dockerfile](./dockerfile)
+
+
