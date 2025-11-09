@@ -1,0 +1,17 @@
+.DS_Store
+Thumbs.db
+node_modules/
+vendor/
+*.log
+.env
+.env.*
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.pid
+.phpstorm.meta.php
+*.bak
+*.tmp
+*.swp
+*.lock

@@ -1,0 +1,67 @@
+# docker compose build → Compilas imágenes.
+# docker compose up -d → Levantas los servicios.
+# docker compose ps → Verificas que estén corriendo.
+# docker compose logs -f → Revisa los logs.
+# docker compose exec -it <servicio> bash → Entras al container
+# docker compose stop → Detiene los contenedores pero no los elimina.
+# docker compose down → Cuando terminas, bajas todo (detiene y elimina contenedores/redes/volúmenes temporales).
+
+# docker volume ls → Lista todos los volúmenes.
+# docker volume inspect <nombre> → Muestra detalles del volumen.
+# docker volume rm <nombre> → Elimina un volumen (⚠️ borra los datos).
+# docker volume prune → Elimina volúmenes no usados.
+
+# docker system prune -a → remove any stopped containers and all unused images
+
+services:
+  # Servicio de Base de Datos (MariaDB)
+  db:
+    image: mariadb:10.11-jammy
+    container_name: lamp-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: users
+      MYSQL_USER: ejemplo_user
+      MYSQL_PASSWORD: oracle
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - lamp-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Servicio Web (Apache + PHP)
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: lamp-web
+    restart: always
+    ports:
+      - "8085:80"
+    volumes:
+      - ./web/html:/var/www/html
+    networks:
+      - lamp-network
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_NAME=users
+      - DB_USER=ejemplo_user
+      - DB_PASSWORD=oracle
+
+# Red privada para la comunicación entre contenedores
+networks:
+  lamp-network:
+    driver: bridge
+
+# Volumen para persistir datos de la base de datos
+volumes:
+  db_data:
